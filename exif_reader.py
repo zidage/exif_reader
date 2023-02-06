@@ -3,7 +3,7 @@ import exifread
 import os
 import csv
 
-type = ['JPG', 'jpg', 'NEF', 'ARW', 'CR2', 'CR3', 'PNG', 'png']
+types = ['.JPG', '.jpg', '.NEF', '.ARW', '.CR2', '.CR3', '.PNG', '.png', '.tif']
 path = os.getcwd()
 files = os.listdir(path)
 os.mkdir('output')
@@ -14,8 +14,8 @@ csv_writer.writerow(["焦段", "光圈"])
 
 for file in files:
     if not os.path.isdir(file):
-        appendix = os.path.splitext(file)[1]
-        if appendix in type:
-            f = open(path+'/'+file, 'rb')
+        file_type = os.path.splitext(file)[1]
+        if file_type in types:
+            f = open(path+'\\'+file, 'rb')
             tags = exifread.process_file(f)
             csv_writer.writerow([eval(str(tags["EXIF FocalLength"])), eval(str(tags["EXIF FNumber"]))])
