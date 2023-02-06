@@ -4,7 +4,7 @@ import os
 import csv
 
 types = ['.JPG', '.jpg', '.NEF', '.ARW',
-         '.CR2', '.CR3', '.PNG', '.png', '.tif', '.dng']
+         '.CR2', '.CR3', '.tif', '.dng']
 path = os.getcwd()
 files = os.listdir(path)
 if not os.path.exists(path+"\\output"):
@@ -28,11 +28,14 @@ def find_file(curr_path, csv_writer):
             if file_type in types:
                 f = open(curr_file_path, 'rb')
                 tags = exifread.process_file(f)
-                focal_length = eval(str(tags["EXIF FocalLength"]))
-                aperture_val = eval(str(tags["EXIF FNumber"]))
-                csv_writer.writerow([focal_length, aperture_val])
-                print(file_type[1:]+"文件："+curr_file_path+" 解析结果：\n焦距：" +
-                      str(focal_length)+"mm        光圈f/"+str(aperture_val))
+                if "EXIF FocalLength" in tags:
+                    focal_length = eval(str(tags["EXIF FocalLength"]))
+                    aperture_val = eval(str(tags["EXIF FNumber"]))
+                    csv_writer.writerow([focal_length, aperture_val])
+                    print(file_type[1:]+"文件："+curr_file_path+" 解析结果：\n焦距：" +
+                        str(focal_length)+"mm        光圈f/"+str(aperture_val))
+                else:
+                    print("该图片中未找到相关信息！")
 
 
 find_file(path, csv_writer)
