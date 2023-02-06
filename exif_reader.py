@@ -36,6 +36,13 @@ def find_file(curr_path):
             if file_type in types:
                 f = open(curr_file_path, 'rb')
                 tags = exifread.process_file(f)
-                csv_writer.writerow([eval(str(tags["EXIF FocalLength"])), eval(str(tags["EXIF FNumber"]))])
+                focal_length = eval(str(tags["EXIF FocalLength"]))
+                aperture_val = eval(str(tags["EXIF FNumber"]))
+                print(file_type[1:]+"文件："+curr_file_path+" 解析结果：\n焦距：" +
+                      str(focal_length)+"mm        光圈f/"+str(aperture_val))
+                csv_writer.writerow([focal_length, aperture_val])
+
 
 find_file(path)
+print("统计完成！")
+os.system("pause")
